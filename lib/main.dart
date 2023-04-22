@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:profanity_filter_app/app/app.dart';
-import 'package:profanity_filter_app/app/injecter.dart';
+import 'app/app.dart';
+import 'app/injecter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
