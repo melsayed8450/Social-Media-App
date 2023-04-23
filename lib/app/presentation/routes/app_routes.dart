@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../pages/home.dart';
+import 'package:social_media_app/app/presentation/pages/login.dart';
 import 'app_pages.dart';
 
 class AppRoutes {
@@ -7,8 +7,8 @@ class AppRoutes {
   static final routes = [
 
     GetPage(
-        name: AppPages.home,
-        page: () => HomePage(),
+        name: AppPages.login,
+        page: () => LoginPage(),
         ),
 
   ];
