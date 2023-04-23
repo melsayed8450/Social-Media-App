@@ -9,8 +9,8 @@ import 'domain/use_cases/response_use_case.dart';
 final sl = GetIt.instance;
 Future<void> init() async {
   //data source
-  sl.registerLazySingleton<RemoteDataSource>(() => RemoteDataSourceImpl(sl()));
+//  sl.registerLazySingleton<RemoteDataSource>(() => RemoteDataSourceImpl(sl()));
  // sl.registerLazySingleton<ResponseUseCase>(() =>  ResponseUseCase(sl()));
-  sl.registerLazySingleton<ResponseRepository>(() =>  ResponeRepositoryImpl(sl()));
+ // sl.registerLazySingleton<ResponseRepository>(() =>  ResponeRepositoryImpl(sl()));
   sl.registerLazySingleton<ApiProvider>(() => ApiProvider());
 }

@@ -1,7 +1,8 @@
-import 'package:image_picker/image_picker.dart';
+import 'package:social_media_app/app/data/models/response_model.dart';
+
 
 
 abstract class ResponseRepository {
- // Future<dynamic> getResponse();
+  Future<PostModel> getPosts();
 
 }

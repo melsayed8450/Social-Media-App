@@ -1,3 +1,3 @@
 class AppRemoteRoutes {
-  static const String baseUrl = "https://crudapi.co.uk/api/v1/";
+  static const String baseUrl = "https://socialmediaapp-e96d.restdb.io/rest/";
 }

@@ -38,73 +38,76 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 FutureBuilder(
-                  future: LoginController.initializeFirebase(context: context),
+                  future: controller.initializeFirebase(context: context),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       return Text('Error initializing Firebase');
                     } else if (snapshot.connectionState ==
                         ConnectionState.done) {
-                      return Obx(
-                         () {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            child: controller.isSigningIn.value
-                                ? CircularProgressIndicator(
-                                    valueColor:
-                                        AlwaysStoppedAnimation<Color>(Colors.white),
-                                  )
-                                : OutlinedButton(
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(Colors.white),
-                                      shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(40),
-                                        ),
-                                      ),
-                                    ),
-                                    onPressed: () async {
-                                      controller.isSigningIn.value = true;
-
-                                      User? user = await LoginController
-                                          .signInWithGoogle(context: context);
-
-                                      controller.isSigningIn.value = false;
-
-                                      if (user != null) {
-                                        Get.to(HomePage(user: user));
-                                      }
-                                    },
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          Image(
-                                            image: AssetImage(AppAssets.googleIcon),
-                                            height: 35.0,
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              'Sign in with Google',
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.black54,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          )
-                                        ],
+                      return Obx(() {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: controller.isSigningIn.value
+                              ? CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                )
+                              : OutlinedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.white),
+                                    shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(40),
                                       ),
                                     ),
                                   ),
-                          );
-                        }
-                      );
+                                  onPressed: () async {
+                                    controller.isSigningIn.value = true;
+
+                                    User? user = await controller
+                                        .signInWithGoogle(context: context);
+
+                                    controller.isSigningIn.value = false;
+
+                                    if (user != null) {
+                                      final userId = (await controller
+                                          .getPersonIdFromEmail(user.email!))!;
+                                      Get.to(
+                                          HomePage(user: user, userId: userId));
+                                    }
+                                  },
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Image(
+                                          image:
+                                              AssetImage(AppAssets.googleIcon),
+                                          height: 35.0,
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 10),
+                                          child: Text(
+                                            'Sign in with Google',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.black54,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                        );
+                      });
                       ;
                     }
                     return CircularProgressIndicator(
