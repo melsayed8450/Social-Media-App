@@ -71,8 +71,7 @@ class LoginPage extends StatelessWidget {
                                     controller.isSigningIn.value = false;
 
                                     if (user != null) {
-                                      final userId = (await controller
-                                          .getPersonIdFromEmail(user.email!))!;
+                                    
                                       Get.to(
                                           HomePage(user: user));
                                     }
@@ -108,7 +107,7 @@ class LoginPage extends StatelessWidget {
                                 ),
                         );
                       });
-                      ;
+                      
                     }
                     return CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(

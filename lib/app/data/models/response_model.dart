@@ -9,5 +9,7 @@ class PostModel extends PostEntity {
     required super.text,
     required super.personName,
     required super.personEmail,
+    required super.likes,
+    required super.likedEmails,
   });
 }

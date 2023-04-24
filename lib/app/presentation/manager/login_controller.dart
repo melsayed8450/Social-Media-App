@@ -89,18 +89,13 @@ class LoginController extends GetxController {
 }) async {
     try {
       // Make a POST request to create a new person
-      var response = await dio.post("${AppRemoteRoutes.baseUrl}people",
+      await dio.post("${AppRemoteRoutes.baseUrl}people",
           data: {"name": name, "email": email},
           options: Options(headers: {
             'content-type': "application/json",
             'x-apikey': "4ddfd7cd94b5c5584f7c597f4dc3664912dd2",
           }));
 
-      // Get the ID of the new person
-      String personId = response.data["_id"];
-
-      // Do something with the new person ID
-      // ...
     } catch (e) {
       print(e);
     }

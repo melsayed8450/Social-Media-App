@@ -80,305 +80,170 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Obx(() {
-        return RefreshIndicator(
-          onRefresh: () => controller.updatePosts(),
-          child: FutureBuilder<List<PostEntity>>(
-              future: controller.postsList,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.pink,
-                    ),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (snapshot.data!.length == 0) {
-                  return Center(
-                      child: Text(
-                    'No data found',
-                    style: TextStyle(
-                      fontSize: 40,
-                    ),
-                  ));
-                } else {
-                  List<PostEntity> dataList = snapshot.data!;
-                  return ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    itemCount: dataList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Center(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 5.w,
-                            vertical: 2.w,
+        return controller.likeInProgress.value
+            ? Center(
+                child: CircularProgressIndicator(
+                  color: Colors.pink,
+                ),
+              )
+            : RefreshIndicator(
+                onRefresh: () => controller.updatePosts(),
+                child: FutureBuilder<List<PostEntity>>(
+                    future: controller.postsList,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.pink,
                           ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(dataList[index].personName),
-                                  // dataList[index].personId == widget.userId
-                                  //     ? Row(
-                                  //         children: [
-                                  //           IconButton(
-                                  //             onPressed: () {
-                                  //               controller
-                                  //                   .postTextEditingController
-                                  //                   .value
-                                  //                   .text = dataList[
-                                  //                       index]
-                                  //                   .text;
-                                  //               showModalBottomSheet(
-                                  //                   isScrollControlled: true,
-                                  //                   context: context,
-                                  //                   builder: (context) {
-                                  //                     return Obx(() {
-                                  //                       return Container(
-                                  //                         height: 70.h,
-                                  //                         child: Padding(
-                                  //                           padding: EdgeInsets
-                                  //                               .symmetric(
-                                  //                                   horizontal:
-                                  //                                       10.w),
-                                  //                           child: Column(
-                                  //                             mainAxisAlignment:
-                                  //                                 MainAxisAlignment
-                                  //                                     .spaceAround,
-                                  //                             children: [
-                                  //                               TextField(
-                                  //                                 controller:
-                                  //                                     controller
-                                  //                                         .postTextEditingController
-                                  //                                         .value,
-                                  //                                 maxLines: 10,
-                                  //                                 decoration:
-                                  //                                     InputDecoration(
-                                  //                                   labelText:
-                                  //                                       'Your post',
-                                  //                                   labelStyle:
-                                  //                                       TextStyle(
-                                  //                                     color: Colors
-                                  //                                         .grey,
-                                  //                                     fontWeight:
-                                  //                                         FontWeight
-                                  //                                             .bold,
-                                  //                                   ),
-                                  //                                   focusedBorder:
-                                  //                                       OutlineInputBorder(
-                                  //                                     borderSide:
-                                  //                                         BorderSide(
-                                  //                                             color: Colors.blue),
-                                  //                                     borderRadius:
-                                  //                                         BorderRadius.circular(
-                                  //                                             10.0),
-                                  //                                   ),
-                                  //                                   enabledBorder:
-                                  //                                       OutlineInputBorder(
-                                  //                                     borderSide:
-                                  //                                         BorderSide(
-                                  //                                             color: Colors.grey),
-                                  //                                     borderRadius:
-                                  //                                         BorderRadius.circular(
-                                  //                                             10.0),
-                                  //                                   ),
-                                  //                                   suffixIcon: Icon(
-                                  //                                       Icons
-                                  //                                           .post_add,
-                                  //                                       color: Colors
-                                  //                                           .blue),
-                                  //                                 ),
-                                  //                               ),
-                                  //                               ElevatedButton(
-                                  //                                   onPressed:
-                                  //                                       () async {
-                                  //                                     controller
-                                  //                                         .isUploadingPost
-                                  //                                         .value = true;
-                                  //                                     await controller
-                                  //                                         .updatePost(
-                                  //                                       postId:
-                                  //                                           dataList[index].id,
-                                  //                                       text: controller
-                                  //                                           .postTextEditingController
-                                  //                                           .value
-                                  //                                           .text,
-                                  //                                       date: DateTime.now()
-                                  //                                           .toString(),
-                                  //                                     );
-                                  //                                     controller
-                                  //                                         .updatePosts();
-                                  //                                     controller
-                                  //                                         .isUploadingPost
-                                  //                                         .value = false;
-                                  //                                     Get.back();
-                                  //                                   },
-                                  //                                   child: controller
-                                  //                                           .isUploadingPost
-                                  //                                           .value
-                                  //                                       ? CircularProgressIndicator(
-                                  //                                           color:
-                                  //                                               Colors.white,
-                                  //                                         )
-                                  //                                       : Text(
-                                  //                                           'Edit Post')),
-                                  //                             ],
-                                  //                           ),
-                                  //                         ),
-                                  //                       );
-                                  //                     });
-                                  //                   });
-                                  //             },
-                                  //             iconSize: 20,
-                                  //             icon: Icon(Icons.edit),
-                                  //           ),
-                                  //           IconButton(
-                                  //             onPressed: () {
-                                  //               showDialog<String>(
-                                  //                 context: context,
-                                  //                 builder:
-                                  //                     (BuildContext context) =>
-                                  //                         AlertDialog(
-                                  //                   title: const Text('Alert'),
-                                  //                   content: Text(
-                                  //                       'Are you sure you want to delete this post?'),
-                                  //                   actions: <Widget>[
-                                  //                     TextButton(
-                                  //                       onPressed: () async {
-                                  //                         controller
-                                  //                             .isDeletingPost
-                                  //                             .value = true;
-                                  //                         await controller
-                                  //                             .deletePost(
-                                  //                           dataList[index].id,
-                                  //                           dataList[index]
-                                  //                               .personId,
-                                  //                         );
-                                  //                         controller.onInit();
-                                  //                         controller
-                                  //                             .isDeletingPost
-                                  //                             .value = false;
-                                  //                         Get.back();
-                                  //                       },
-                                  //                       child: controller
-                                  //                               .isDeletingPost
-                                  //                               .value
-                                  //                           ? CircularProgressIndicator()
-                                  //                           : Text(
-                                  //                               'Yes, Delete'),
-                                  //                     ),
-                                  //                     TextButton(
-                                  //                       onPressed: () =>
-                                  //                           Get.back(),
-                                  //                       child: const Text(
-                                  //                         'Cancel',
-                                  //                         style: TextStyle(
-                                  //                             fontWeight:
-                                  //                                 FontWeight
-                                  //                                     .bold),
-                                  //                       ),
-                                  //                     ),
-                                  //                   ],
-                                  //                 ),
-                                  //               );
-                                  //             },
-                                  //             iconSize: 20,
-                                  //             icon: Icon(Icons.delete),
-                                  //           ),
-                                  //         ],
-                                  //       )
-                                  //     : SizedBox(),
-
-                                  IconButton(
-                                      onPressed: () {
-                                        CustomWidgets().showOptions(
-                                            context: context,
-                                            controller: controller,
-                                            dataList: dataList,
-                                            index: index,
-                                            widget: widget);
-                                      },
-                                      icon: Icon(Icons.more_vert))
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text(DateTime.now()
-                                              .difference(dataList[index].date)
-                                              .inMinutes <
-                                          2
-                                      ? '1 minute ago'
-                                      : DateTime.now()
-                                                  .difference(
-                                                      dataList[index].date)
-                                                  .inMinutes <
-                                              60
-                                          ? '${DateTime.now().difference(dataList[index].date).inMinutes} minutes ago'
-                                          : DateTime.now()
-                                                      .difference(
-                                                          dataList[index].date)
-                                                      .inHours <
-                                                  2
-                                              ? '1 hour ago'
-                                              : DateTime.now()
-                                                          .difference(dataList[index]
-                                                              .date)
-                                                          .inHours <
-                                                      24
-                                                  ? '${DateTime.now().difference(dataList[index].date).inHours} hours ago'
-                                                  : DateTime.now()
-                                                              .difference(
-                                                                  dataList[index]
-                                                                      .date)
-                                                              .inDays <
-                                                          2
-                                                      ? '1 day ago'
-                                                      : DateTime.now()
-                                                                  .difference(dataList[index].date)
-                                                                  .inDays <
-                                                              7
-                                                          ? '${DateTime.now().difference(dataList[index].date).inHours} days ago'
-                                                          : '${dataList[index].date.day.toString()} - ${dataList[index].date.month.toString()} - ${dataList[index].date.year.toString()}'),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 0.6.h,
-                              ),
-                              Material(
-                                elevation: 20,
-                                child: Container(
-                                  width: double.maxFinite,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.grey,
-                                        width: 2,
-                                      ),
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 5.w,
-                                      vertical: 2.h,
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (snapshot.data!.length == 0) {
+                        return Center(
+                            child: Text(
+                          'No data found',
+                          style: TextStyle(
+                            fontSize: 40,
+                          ),
+                        ));
+                      } else {
+                        List<PostEntity> dataList = snapshot.data!;
+                        return ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          itemCount: dataList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Center(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 5.w,
+                                  //  vertical: 2.w,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(dataList[index].personName),
+                                        IconButton(
+                                            onPressed: () {
+                                              CustomWidgets().showOptions(
+                                                  context: context,
+                                                  controller: controller,
+                                                  dataList: dataList,
+                                                  index: index,
+                                                  widget: widget);
+                                            },
+                                            icon: Icon(Icons.more_vert))
+                                      ],
                                     ),
-                                    child: Text(
-                                      dataList[index].text,
-                                      style: TextStyle(
-                                        color: Colors.black,
+                                    Row(
+                                      children: [
+                                        Text(DateTime.now()
+                                                    .difference(
+                                                        dataList[index].date)
+                                                    .inMinutes <
+                                                2
+                                            ? '1 minute ago'
+                                            : DateTime.now()
+                                                        .difference(dataList[index]
+                                                            .date)
+                                                        .inMinutes <
+                                                    60
+                                                ? '${DateTime.now().difference(dataList[index].date).inMinutes} minutes ago'
+                                                : DateTime.now()
+                                                            .difference(
+                                                                dataList[index]
+                                                                    .date)
+                                                            .inHours <
+                                                        2
+                                                    ? '1 hour ago'
+                                                    : DateTime.now()
+                                                                .difference(
+                                                                    dataList[index]
+                                                                        .date)
+                                                                .inHours <
+                                                            24
+                                                        ? '${DateTime.now().difference(dataList[index].date).inHours} hours ago'
+                                                        : DateTime.now()
+                                                                    .difference(dataList[index].date)
+                                                                    .inDays <
+                                                                2
+                                                            ? '1 day ago'
+                                                            : DateTime.now().difference(dataList[index].date).inDays < 7
+                                                                ? '${DateTime.now().difference(dataList[index].date).inHours} days ago'
+                                                                : '${dataList[index].date.day.toString()} - ${dataList[index].date.month.toString()} - ${dataList[index].date.year.toString()}'),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 0.6.h,
+                                    ),
+                                    Material(
+                                      elevation: 20,
+                                      child: Container(
+                                        width: double.maxFinite,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.grey,
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 5.w,
+                                            vertical: 2.h,
+                                          ),
+                                          child: Text(
+                                            dataList[index].text,
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () async {
+                                            if (dataList[index]
+                                                .likedEmails
+                                                .contains(widget.user.email)) {
+                                                   await controller.removeLikeFromPost(
+                                                dataList[index].id,
+                                              );
+                                              controller.updatePosts();
+                                            } else {
+                                              await controller.addLikeToPost(
+                                                dataList[index].id,
+                                              );
+                                              controller.updatePosts();
+                                            }
+                                          },
+                                          icon: Icon(
+                                            Icons.favorite,
+                                            color: dataList[index]
+                                                    .likedEmails
+                                                    .contains(widget.user.email)
+                                                ? Colors.pink
+                                                : Colors.grey,
+                                          ),
+                                        ),
+                                        Text(dataList[index].likes.toString()),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                }
-              }),
-        );
+                            );
+                          },
+                        );
+                      }
+                    }),
+              );
       }),
     );
   }
