@@ -2,14 +2,16 @@ import 'package:equatable/equatable.dart';
 
 class PostEntity extends Equatable {
   final String id;
-  final String personId;
+
+  final String personName;
+  final String personEmail;
   final String text;
   final DateTime date;
 
-  PostEntity({required this.personId,required this.id, required this.text, required this.date});
+  PostEntity({required this.personName,required this.id, required this.text, required this.date, required this.personEmail});
 
   @override
-  List<Object?> get props => [id, text, date, personId];
+  List<Object?> get props => [id, text, date, personName, personEmail];
 
   @override
   bool get stringify => true;
@@ -22,8 +24,9 @@ class PostEntity extends Equatable {
           id == other.id &&
           text == other.text &&
           date == other.date &&
-          personId == other.personId;
+          personName == other.personName &&
+          personEmail == other.personEmail;
 
   @override
-  int get hashCode => id.hashCode ^ text.hashCode ^ date.hashCode ^ personId.hashCode;
+  int get hashCode => id.hashCode ^ text.hashCode ^ date.hashCode ^ personEmail.hashCode;
 }

@@ -50,7 +50,7 @@ class LoginPage extends StatelessWidget {
                           child: controller.isSigningIn.value
                               ? CircularProgressIndicator(
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white),
+                                      Colors.pink),
                                 )
                               : OutlinedButton(
                                   style: ButtonStyle(
@@ -74,7 +74,7 @@ class LoginPage extends StatelessWidget {
                                       final userId = (await controller
                                           .getPersonIdFromEmail(user.email!))!;
                                       Get.to(
-                                          HomePage(user: user, userId: userId));
+                                          HomePage(user: user));
                                     }
                                   },
                                   child: Padding(
@@ -112,7 +112,7 @@ class LoginPage extends StatelessWidget {
                     }
                     return CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        Colors.orange,
+                        Colors.pink,
                       ),
                     );
                   },

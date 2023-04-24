@@ -7,6 +7,7 @@ class PostModel extends PostEntity {
     required super.date,
     required super.id,
     required super.text,
-    required super.personId,
+    required super.personName,
+    required super.personEmail,
   });
 }

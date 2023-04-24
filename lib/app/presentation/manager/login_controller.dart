@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_media_app/app/presentation/pages/home.dart';
-import 'package:social_media_app/app/presentation/widgets/custom_snackbar.dart';
+import 'package:social_media_app/app/presentation/widgets/custom_widgets.dart';
 
 import '../../data/routes/remote_routes.dart';
 
@@ -21,8 +21,7 @@ class LoginController extends GetxController {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      final userId = (await getPersonIdFromEmail(user.email!))!;
-      Get.to(HomePage(user: user, userId:userId));
+      Get.to(HomePage(user: user));
     }
 
     return firebaseApp;
@@ -55,7 +54,7 @@ class LoginController extends GetxController {
           addPerson(
             name: user?.displayName ?? "No name available",
             email: user?.email ?? "No email available",
-            posts: [],
+ 
           );
         }
       } on FirebaseAuthException catch (e) {
@@ -87,11 +86,11 @@ class LoginController extends GetxController {
   Future<void> addPerson(
       {required String name,
       required String email,
-      required List<String> posts}) async {
+}) async {
     try {
       // Make a POST request to create a new person
       var response = await dio.post("${AppRemoteRoutes.baseUrl}people",
-          data: {"name": name, "email": email, "posts": posts},
+          data: {"name": name, "email": email},
           options: Options(headers: {
             'content-type': "application/json",
             'x-apikey': "4ddfd7cd94b5c5584f7c597f4dc3664912dd2",
